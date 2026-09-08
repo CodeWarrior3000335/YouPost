@@ -33,8 +33,7 @@ a certain peroid of time with a given reason for them.
 ## Setup
 <br>
 1. Clone this repo:
-``git clone <repo_url>
-cd django_ecommerce_mod5``
+``YouPost``
 
 2. Create and activate a virtual environment (recommended):
 ``python -m venv .venv
