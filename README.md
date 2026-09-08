@@ -33,23 +33,23 @@ a certain peroid of time with a given reason for them.
 ## Setup
 <br>
 1. Clone this repo:
-```git clone <repo_url>
-cd django_ecommerce_mod5```
+``git clone <repo_url>
+cd django_ecommerce_mod5``
 
 2. Create and activate a virtual environment (recommended):
-```python -m venv .venv
-source .venv/bin/activate```
+``python -m venv .venv
+source .venv/bin/activate``
 
 3. Install dependencies:
-```pip install -r requirements.txt```
+  ``pip install -r requirements.txt``
 
 4. Apply database migrations:
-```python manage.py migrate```
+``python manage.py migrate``
 
 5. (Optional) Create an admin user:
-```python manage.py createsuperuser```
+``python manage.py createsuperuser``
 
 6. Run the server:
-```python manage.py runserver```
+``python manage.py runserver``
 
 7. Visit the app at http://127.0.0.1:8000/
