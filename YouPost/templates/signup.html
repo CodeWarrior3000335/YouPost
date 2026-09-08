@@ -1,0 +1,146 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Character encoding -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design for mobile and different screen sizes -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon (browser tab icon) -->
+    <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
+
+    <!-- Page title -->
+    <title>Sign Up - YouPost</title>
+
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}"> <!-- Icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}"> <!-- UI Kit framework -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}"> <!-- Main site styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}"> <!-- Tailwind CSS utilities -->
+
+    <!-- My customed made logo of site -->
+    <link rel="icon" type="image/png" href="{% static 'images/YouPost.png' %}">
+
+</head>
+
+<body class="bg-gray-100">
+
+
+    <div id="wrapper" class="flex flex-col justify-between h-screen">
+
+        <!-- ========================
+            Header Section
+        ======================== -->
+        <div class="bg-white py-4 shadow dark:bg-gray-800">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex items-center lg:justify-between justify-around">
+
+                    <!-- Logo / Home link -->
+                    <a href="trending.html">
+                        <b><h1 style="font-size: 1.5rem;">YouPost</h1></b>
+                    </a>
+
+                    <!-- Login button (visible on large screens only) -->
+                    <div class="capitalize flex font-semibold hidden lg:block my-2 space-x-3 text-center text-sm">                        
+                        <a href="/signin" class="bg-pink-500 pink-500 px-6 py-3 rounded-md shadow text-white">Login</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End Header -->
+        
+
+        <!-- ========================
+            Main Content Section (Sign Up Form)
+        ======================== -->
+        <div>
+            <div class="lg:p-12 max-w-md max-w-xl lg:my-0 my-12 mx-auto p-6 space-y-">
+
+                <!-- Page heading -->
+                <h1 class="lg:text-3xl text-xl font-semibold mb-6">Sign Up</h1>
+                
+                <!-- Display Django messages (errors or notifications) -->
+                <div>
+                    <style>
+                        h5{
+                            color: red; /* Style messages in red */
+                        }
+                    </style>
+                    {% for message in messages %}
+                    <h5>{{message}}</h5>
+                    {% endfor %}
+                </div>
+                
+                <!-- Sign Up Form -->
+                <form action="" method="POST">
+                    {% csrf_token %}
+
+                    <!-- ============================
+                            Input Fields 
+                        ============================ -->
+                    
+                    <!-- Username Field -->
+                    <input type="text" name="username" placeholder="Username" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+
+                    <!-- Email Field -->
+                    <input type="email" name="email" placeholder="Email" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+
+                    <!-- Password Fields -->
+                    <input type="password" name="password" placeholder="Password" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+
+                    <input type="password" name="password2" placeholder="Confirm Password" class="bg-gray-200 mb-2 shadow-none  dark:bg-gray-800" style="border: 1px solid #d3d5d8 !important;">
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="bg-gradient-to-br from-pink-500 py-3 rounded-md text-white text-xl to-red-400 w-full">Sign Up</button>
+
+                    <!-- Link to Login page -->
+                    <div class="text-center mt-5 space-x-2">
+                        <p class="text-base"> Do you have an account? <a href="/signin"> Login </a></p>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!-- End Main Content -->
+        
+         <!-- ========================
+                Footer Section
+            ======================== -->
+        <div class="lg:mb-5 py-3 uk-link-reset">
+            <div class="flex flex-col items-center justify-between lg:flex-row max-w-6xl mx-auto lg:space-y-0 space-y-3">
+
+                <!-- Footer navigation links -->
+                <div class="flex space-x-2 text-gray-700 uppercase">
+                    <a href="#"> About</a>
+                    <a href="#"> Help</a>
+                    <a href="#"> Terms</a>
+                    <a href="#"> Privacy</a>
+                </div>
+
+                <!-- Copyright notice -->
+                <p class="capitalize"> © copyright 2026 by YouView</p>
+            </div>
+        </div>
+        <!-- End Footer -->
+
+    </div>
+
+    <!-- ========================
+        JavaScript Includes
+    ========================= -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script> <!-- Tooltip library -->
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script> <!-- jQuery library -->
+    <script src="{% static 'assets/js/uikit.js' %}"></script> <!-- UI Kit scripts -->
+    <script src="{% static 'assets/js/simplebar.js' %}"></script> <!-- Custom scrollbars -->
+    <script src="{% static 'assets/js/custom.js' %}"></script> <!-- Site-specific scripts -->
+
+
+</body>
+
+
+</html>

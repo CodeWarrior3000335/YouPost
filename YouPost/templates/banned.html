@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Character encoding for proper text rendering -->
+    <meta charset="UTF-8">
+
+    <!-- Ensures responsive design on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Website favicon (browser tab icon) -->
+     <link rel="icon" type="image/png" href="{% static 'images/YouPost.png' %}">
+    <link href="{% static 'favicon.png' %}" rel="icon" type="image/png">
+
+     <!-- Page title displayed in browser tab -->
+    <title>Home</title>
+
+
+    <!-- ============================
+            External CSS Frameworks
+     ================================ -->
+
+    <!-- Icon library for additional UI icons -->
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}">
+
+     <!-- UIkit framework for dropdowns, modals, and other components -->
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}">
+
+     <!-- Custom site-specific styling -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+    <!-- Tailwind CSS included again (can be removed to avoid duplication) -->
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}">
+
+    <!-- Font Awesome for additional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+<!-- 
+Body styling:
+- Dark background
+- Flexbox centering
+- Full screen height
+-->
+<body class="bg-gray-900 flex items-center justify-center min-h-screen">
+
+    <!-- Centered content container -->
+    <div class="text-center">
+
+        <!-- Main heading displaying banned user's username -->
+        <h1 class="text-4xl font-bold text-gray-200 mb-4">
+            Sorry {{ ban.user }}!
+        </h1>
+        
+        <!-- Message showing when the ban expires -->
+        <h3 class="text-lg text-gray-450">
+            You are not allowed to visit this site until 
+            <span class="font-semibold text-gray-300">
+                {{ ban.end_date }}
+            </span>.
+        </h3>
+
+        <!-- Message showing the reason for the ban -->
+        <h3 class="text-lg text-gray-500">
+            Reason: 
+            <span class="font-semibold text-gray-300">
+                {{ ban.reason }}
+            </span>
+        </h3>
+    </div>
+
+</body>
+</html>

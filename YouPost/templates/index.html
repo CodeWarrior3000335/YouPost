@@ -1,0 +1,828 @@
+{% load static %} 
+<!DOCTYPE html> 
+<html lang="en"> 
+    
+     <!-- =======================================
+            Page Styling (Inline CSS)
+    ======================================== -->
+    <style>
+
+         /* Makes like/dislike icons clickable and adds a smooth hover animation */
+         .icon { cursor: pointer; transition: transform 0.2s ease; }
+         
+         /* Flips the like icon vertically to create a dislike icon */
+         .dislike { transform: scaleY(-1); }
+
+    </style> 
+
+    <head> 
+
+        <!-- Character encoding -->
+        <meta charset="UTF-8"> 
+
+         <!-- Makes the page responsive on mobile devices -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+        <!-- Website favicon -->
+        <link href="{% static 'favicon.png' %}" rel="icon" type="image/png"> 
+
+        <!-- Page title -->
+        <title>Home</title> 
+
+        <!-- =======================================
+                External CSS Frameworks
+        ======================================== -->
+
+        <!-- Custom icon library -->
+        <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}"> 
+
+        <!-- UIkit framework -->
+        <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}"> 
+
+        <!-- Custom styling -->
+        <link rel="stylesheet" href="{% static 'assets/css/style.css' %}"> 
+
+        <!-- Tailwind CSS utility framework -->
+        <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}"> 
+
+        <!-- Font Awesome icon library -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+
+    </head> 
+
+    <body> 
+
+        <!-- =======================================
+                     Navbar Section 
+         ===========================================-->
+        <header> 
+            <div class="header_inner"> 
+
+                <!-- Search form for finding users -->
+                <form action="/search" method="POST"> 
+                    {% csrf_token %} 
+
+                    <div class="left-side"> 
+
+                        <!-- Website Logo -->
+                        <div id="logo" class=" uk-hidden@s"> 
+                            <a href="home.html"> 
+                                <b>
+                                    <h1 style="text-transform: uppercase;" class="uppercase font-bold">YouPost</h1>
+                                </b> 
+                            </a> 
+                        </div> 
+                        
+                        <!-- Search input -->
+                        <input type="text" name="username" placeholder="Search for username..">
+                        &nbsp; &nbsp; 
+                        
+                        <!-- Search button -->
+                        <button type="submit"><i class="fa fa-search fa-1x"></i></button> 
+
+                    </div> 
+                </form> 
+                
+                <!-- Right side of navbar -->
+                <div class="right-side lg:pr-4"> 
+
+                    <!-- Upload post button --> 
+                     <a href="#" class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white"> 
+                        Upload Posts 
+                    </a>
+
+
+                      <!-- =======================================
+                            Upload Dropdown
+                    ======================================== -->
+
+                      <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small" class="header_dropdown">
+
+                          <!-- Dropdown title -->
+                          <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b"> <h4>Upload Posts</h4> </div>
+
+                            <!-- Upload form container --> 
+                            <div class="flex justify-center flex-center text-center"> 
+
+                                <div class="flex flex-col choose-upload text-center"> 
+
+                                    <!-- Upload icon box -->
+                                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-24 items-center justify-center relative w-full rounded-lg "> 
+
+                                        <!-- Upload icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12"> <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" /> <path d="M9 13h2v5a1 1 0 11-2 0v-5z" /> </svg> 
+
+                                    </div> 
+
+                                    <!-- Upload form -->
+                                    <form action="upload" method="POST" enctype="multipart/form-data" > 
+                                        {% csrf_token %} 
+
+
+                                        <p class="my-3 leading-6"> 
+                                            Upload Posts 
+                                        </p> 
+
+                                        <div> 
+
+                                            <!-- File input -->
+                                            <input type="file" name="file" id="fileInput"> 
+
+                                            <!-- Validation error message -->
+                                            <p id="fileError" style="color:red; font-weight:bold;"></p> 
+
+                                            <!-- Caption input -->
+                                            <textarea class="button soft-warning small" name="caption" placeholder="caption..." >
+                                            </textarea> 
+
+                                            <br> 
+
+                                            <!-- Submit button -->
+                                            <button class="button bg-blue-700" type="submit" >Upload</button> 
+
+                                        </div> 
+                                        
+                                    </form> 
+
+                                </div> 
+
+                            </div> 
+
+                            <!-- Upload file size notice -->
+                            <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm"> Your File size Must be Maxmium 20MB 
+
+                            </div> 
+                        </div> 
+
+                        <!-- =======================================
+                            Profile Avatar
+                        ======================================== -->
+
+                        <!-- Displays the logged in user's profile image -->
+                        <a href="#"> 
+                            <img src="{{user_profile.profileimg.url}}" class="header-avatar" alt=""> 
+                        </a> 
+
+                        <!-- Profile dropdown menu -->
+                        <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t"> 
+                            <ul> 
+
+                                <!-- Account settings link -->
+                                <li>
+                                    <a href="/settings"> Account setting 
+
+                                    </a> 
+                                </li> 
+                                
+                                <!-- Logout link -->
+                                <li>
+                                    <a href="signin"> Log Out
+
+                                    </a>
+                                </li> 
+                            </ul> 
+                        </div> 
+                    </div> 
+                </div> 
+            </header> 
+
+            <!-- =======================================
+                Django Messages (Alerts)
+        ======================================== -->
+
+            <!-- Displays success, warning, or error messages from Django -->
+            {% if messages %}
+                <div class="container m-auto mt-4 space-y-3">
+
+                    {% for message in messages %}
+
+                        <div class="uk-alert 
+                                    {% if message.tags == 'success' %} uk-alert-success 
+                                    {% elif message.tags == 'error' %} uk-alert-danger
+                                    {% elif message.tags == 'warning' %} uk-alert-warning
+                                    {% else %} uk-alert-primary {% endif %}" 
+                            uk-alert>
+                            
+                            <!-- Close button -->
+                            <a class="uk-alert-close" uk-close></a>
+
+                            <!-- Message text -->
+                            {{ message }}
+
+                        </div>
+
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+            <!-- ========================================
+                           Posts Feed Section
+            ===========================================-->
+
+            <div class="container m-auto"> 
+
+                <!-- Main layout container -->
+                <div class="lg:flex justify-center lg:space-x-10 lg:space-y-0 space-y-5"> 
+
+                    <!-- Posts column -->
+                    <div class="space-y-5 flex-shrink-0 lg:w-7/12"> 
+
+                        <!-- Loop through all posts -->
+                        {% for post in posts reversed %} 
+
+                        <div class="bg-white shadow rounded-md -mx-2 lg:mx-0">
+
+                            <div class="flex justify-between items-center px-4 py-3">
+                                
+                                <!-- Post header -->
+                                <div class="flex flex-1 items-center space-x-4"> 
+
+                                    <!-- Username -->
+                                    <span class="block font-semibold ">
+                                        <a href="/profile/{{ post.user }}">@{{post.user}}
+                                        </a>
+                                    </span> 
+
+
+                                </div> 
+
+                                <div> 
+
+                                    <!-- Post options dropdown -->
+                                    <a href="#">
+                                         <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 ">
+                                         </i> 
+                                    </a> 
+
+
+                                     <!-- ==================================================
+                                        Post Options Dropdown (Delete / Report)
+                                        ==================================================
+
+                                        This dropdown appears when the user clicks or hovers
+                                        over the "three dots" icon on a post.
+
+                                        It shows different options depending on whether the
+                                        logged-in user owns the post.
+                                    =================================================== -->
+
+
+                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 " uk-drop="mode: hover;pos: top-right">
+
+                                         <!-- Options list -->
+                                         <ul class="space-y-1"> 
+
+                                            <li> 
+                                                <div class="relative"> 
+
+                                                    <!-- ==================================================
+                                                        Check if the logged-in user is the owner of the post
+                                                        ==================================================
+
+                                                        If TRUE:
+                                                        → Show the DELETE button
+
+                                                        If FALSE:
+                                                        → Show the REPORT option
+                                                    =================================================== -->                                     
+                                                    {% if post.user == request.user.username %}
+                                                    
+                                                    <!-- ==================================================
+                                                        Delete Post Form
+                                                        ==================================================
+
+                                                        Allows the owner of the post to delete it.
+                                                        The post ID is sent to the Django backend so
+                                                        the correct post can be removed.
+                                                    =================================================== -->
+                                                    <form method="POST" action="{% url 'delete_post' %}">                               
+                                                        {% csrf_token %}
+
+                                                        <!-- Hidden field containing the post ID -->
+                                                        <input type="hidden" name="post_id" value="{{ post.id }}">
+
+                                                        <!-- Delete button -->
+                                                        <button type="submit"
+                                                            class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md">
+                                                            Delete
+                                                        </button>
+
+                                                    </form>
+
+                                                    {% else %}
+
+                                                    <!-- ==================================================
+                                                        Report Button (for users who do NOT own the post)
+                                                        ==================================================
+
+                                                        Clicking this opens another dropdown containing
+                                                        the report form.
+                                                    =================================================== -->
+                                                      <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md"> 
+                                                        Report 
+                                                    </a>
+
+                                                      <!-- ==================================================
+                                                        Report Dropdown Form
+                                                        ==================================================
+
+                                                        Allows a user to report a post and provide a
+                                                        reason for the report.
+                                                    =================================================== -->
+                                                      <div uk-dropdown="mode: click; pos: bottom-right; animation: uk-animation-slide-top-small" class="uk-card uk-card-default uk-card-body uk-width-medium rounded shadow-lg">
+                                                          
+                                                         <!-- Report submission form -->
+                                                         <form action="{% url 'report' %}" method="POST"> 
+                                                            {% csrf_token %} 
+
+                                                            <!-- Hidden post ID so the backend knows which post is being reported -->
+                                                            <input type="hidden" name="post_id" value="{{ post.id }}"> 
+
+                                                            <!-- Label for the report reason -->
+                                                            <label for="reason-{{post.id}}" class="block font-semibold mb-2">
+                                                                 Reason for report: 
+                                                            </label>
+                                                            
+                                                            <!-- Textarea for user to explain the report -->
+                                                            <textarea id="reason-{{post.id}}" name="reason" placeholder="Explain why you are reporting this post..." class="uk-textarea mb-3" required></textarea> 
+                                                            
+                                                            <!-- Submit report button -->
+                                                            <button type="submit" class="uk-button uk-button-danger uk-width-1-1">
+                                                                 Submit Report 
+                                                            </button> 
+                                                        </form> 
+                                                
+                                                    </div> 
+                                                    {% endif %}
+                                                </div> 
+                                            </li> 
+                                        </ul> 
+                                    </div> 
+                                </div> 
+                            </div> 
+
+                            <!-- =======================================
+                                Post Media
+                            ======================================== -->
+
+                            <div uk-lightbox>
+
+                                 <!-- Image post -->
+                                 {% if post.is_image %}
+                                  <a href="{{ post.file.url }}"> <img src="{{ post.file.url }}" alt=""> 
+                                </a> 
+
+                                <!-- Video post -->
+                                {% elif post.is_video %}
+                                 <a href="{{ post.file.url }}"> <video src="{{ post.file.url }}" controls></video> </a> 
+                                 {% endif %}
+
+                            </div> 
+
+
+                            <!-- =======================================
+                                Post Actions
+                            ======================================== -->
+                                 
+                            <div class="py-3 px-4 space-y-3"> 
+
+                                
+                                <div class="flex space-x-4 lg:font-bold"> 
+
+                                    <!-- Like button -->
+                                    <a href="/like-post?post_id={{ post.id }}" class="flex items-center space-x-2"> 
+
+                                        <div class="p-2 rounded-full text-black"> 
+
+                                            <!-- Like icon -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class=""> <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" /> </svg>
+
+                                             <!-- Like count text -->
+                                             {% if post.num_of_likes == 0 %}
+                                              <p>No likes</p>
+                                             {% elif post.num_of_likes == 1 %} <p>Liked by {{post.num_of_likes}} person</p>
+                                             {% else %} 
+                                                <p>Liked by {{post.num_of_likes}} people</p>
+                                            {% endif %} 
+
+                                        </div> 
+                                    </a> 
+
+                                    <!-- Dislike button -->
+                                    <a href="/dislike-post?post_id={{ post.id }}" class="flex items-center space-x-2"> <div class="p-2 rounded-full text-black"> 
+
+                                        <!-- Dislike icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="icon dislike"> <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" /> </svg> 
+
+                                        <!-- Dislike count text -->
+                                        {% if post.num_of_dislikes == 0 %} <p>No dislikes</p> 
+                                        {% elif post.num_of_dislikes == 1 %} <p>Disliked by {{post.num_of_dislikes}} person</p> 
+                                        {% else %} <p>Disliked by {{post.num_of_dislikes}} people</p> 
+                                        {% endif %} 
+
+                                    </div> 
+                                </a> 
+
+                                <!-- Download button -->
+                                <a href="{% url 'download_post' post.id %}" class="flex items-center space-x-2 flex-1 justify-end download-btn" data-post-id="{{ post.id }}">
+
+                                    <!-- Download icon -->
+                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"><g fill="currentColor"><path d="M8.5 1.5A1.5 1.5 0 0 1 10 0h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h6c-.314.418-.5.937-.5 1.5v6h-2a.5.5 0 0 0-.354.854l2.5 2.5a.5.5 0 0 0 .708 0l2.5-2.5A.5.5 0 0 0 10.5 7.5h-2v-6z"/></g></svg> 
+                                </a> 
+
+                                <!-- Download counter -->
+                                <p>
+                                    Downloads: <span id="downloads-{{ post.id }}">{{post.downloads}}</span>
+                                </p> 
+                            
+                        </div> 
+
+
+                        <!-- ====================================== 
+                                    Comments Section 
+                         ======================================= -->
+
+                        <!-- Caption --> 
+                        <p> 
+                            <a href="/profile/{{post.user}}">
+                                <strong>{{post.user}}</strong>
+                            </a> 
+                            {{post.caption}} 
+                        </p>
+
+                            <div class="flex justify-end mt-auto"> 
+
+                                 <!-- Toggle comments button -->
+                                <button onclick="toggleComments(this)" class="text-blue-500 font-semibold hover:underline">
+                                    View Coments
+                                </button> 
+
+                            </div> 
+
+                            <!-- Comments container -->
+                            <div class="comments-container mt-3 space-y-2 hidden"> 
+
+                                <div> 
+
+                                    <!-- ==================================================
+                                            Upload Comment Button
+                                            ==================================================
+
+                                            This button is intended to open a dropdown where
+                                            users can write and submit a comment for the post.
+
+                                            The styling uses Tailwind classes for colour,
+                                            layout, and hover effects.
+                                        =================================================== -->
+                                    <a href="#" class="bg-pink-500 flex font-bond hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px4 py-2 rounded shado text-white"> 
+
+                                        <!-- Icon for the comment button -->
+                                        <icon-icon name="add-circle" class="-mb1 mr-1 opacity-90 text-xl uilus-circle"></icon-icon>
+                                         Upload Comments 
+                                    </a> 
+
+                                    <!-- ==================================================
+                                        Upload Comment Dropdown
+                                        ==================================================
+
+                                        This UIkit dropdown appears when the upload comment
+                                        button is clicked.
+
+                                        It contains a form that allows the user to submit
+                                        a new comment for the current post.
+                                    =================================================== -->
+                                    <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-button-small" class="header_dropdown">
+
+                                         <!-- Dropdown header -->
+                                         <div class="px-4 py-3 -mx-5 -mt-4 mb-5 boarder-b">
+
+                                             <h4>Upload Comments</h4> 
+
+                                        </div> 
+
+                                        <!-- ==================================================
+                                            Comment Submission Form
+                                            ==================================================
+
+                                            Sends a POST request to the Django view
+                                            "upload_comment" with:
+                                            - post_id (hidden input)
+                                            - content (comment text)
+                                        =================================================== -->
+                                        <form action="upload_comment" method="POST"> 
+                                            {% csrf_token %}
+
+                                             <!-- Hidden field containing the ID of the post
+             the comment belongs to -->
+                                             <input type="hidden" name="post_id" value="{{ post.id }}"> 
+
+                                              <!-- Form description -->
+                                             <p class="my-3 leading-6">Upload Comment</p>
+
+                                              <div>
+
+                                                <!-- Text area where the user writes the comment -->
+                                                 <textarea class="button soft-warning small" name="content" placeholder="content...">
+
+                                                 </textarea> 
+
+                                                 <br> 
+
+                                                 <!-- Submit button -->
+                                                 <button class="button bg-blue-700" type="submit">Upload
+
+                                                 </button>
+
+                                              </div> 
+                                        </form> 
+                                    </div> 
+
+
+                                </div> 
+
+
+                                <br> 
+
+                                 <!-- Loop through comments -->
+                                {% for comment in post.comment_set.all reversed %}
+
+                                 <div class="text-sm bg-gray-100 rounded-lg px-3 py-2 mb-2">
+                                     
+                                       <div style="display:flex; 
+                                        justify-content:space-between; align-items:center;"> 
+
+                                        <!-- Comment username -->
+                                        <a href="/profile/{{comment.username}}"> <strong>{{ comment.username }}</strong> 
+                                        </a> 
+
+
+                                        <!-- ==================================================
+                                                        Check if the logged-in user is the owner of the comment
+                                                        ==================================================
+
+                                                        If TRUE:
+                                                        → Show the settings button so the logged-in user can delete or edit their comment
+
+                                                        If FALSE:
+                                                        → Do not show the settings button 
+                                                        
+                                                    ===================================================     -->                          
+
+                                        {% if comment.username == request.user.username %}
+
+                                         <!-- Settings button -->
+                                         <button onclick="toggleMenu('{{ comment.id }}')" title="Settings" style="background:none;border:none;font-size:18px;cursor:pointer;"> ⋯ </button> 
+                                         {% endif %} 
+                                        </div> 
+
+                                         <!-- Comment text -->
+                                           <div>
+                                             {{ comment.content }}
+                                           </div>
+
+                                            <!-- If the logged-in user is the owner of that comment, display both the delete and the edit button -->
+                                            {% if comment.username == request.user.username %}
+
+                                             <!-- Comment ID -->
+                                             <div id="menu-{{ comment.id }}" style="display:none; margin-top:10px;">
+                                                 <hr>
+                                                 <br>
+
+                                                 <!-- Delete form -->
+                                                 <form action="/delete_comment" method="POST">
+                                                     {% csrf_token %}
+
+                                                      <!-- Gets the ID of that comment -->
+                                                      <input type="hidden" name="comment_id" value="{{ comment.id }}"> 
+
+                                                      <!-- Delete button -->
+                                                      <button style="background-color: red; color: white; width: 70px">Delete</button>
+                                                 </form>
+                                                  
+                                                 <br>
+
+                                                  <!-- Edit form -->
+                                                  <form action="/edit_comment" method="POST"> 
+                                                    {% csrf_token %}
+
+                                                      <!-- Gets the ID of that comment -->
+                                                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                                                      
+                                                      <!-- Text area of comment -->
+                                                      <input type="text" name="new_content" placeholder="Edit comment">
+
+                                                       <!-- Edit button -->
+                                                       <button style="background-color: orange; color: white; width: 50px;">Edit</button>
+
+                                                  </form>
+                                             </div> 
+
+                                             {% endif %} 
+                                            </div> 
+
+                                            {% empty %} 
+                                            <!-- Displays message if there are no existing comments -->
+                                            <p class="text-gray-400 text-sm">No comments yet</p> 
+                                            {% endfor %} 
+                                        </div> 
+                                    </div> 
+                                </div> 
+                                {% endfor %} 
+                            </div> 
+
+                            <!-- ================================
+                                User Suggestions Section
+                            ================================== --> 
+                             <div class="w-full lg:w-5/12 sticky top-6 h-fit">
+
+                                <div class="bg-white shadow-md rounded-md overflow-hidden"> 
+
+                                    <!-- Section titile -->
+                                    <div class="bg-gray-50 border-b border-gray-100 flex items-baseline justify-between py-4 px-6 "> 
+                                        <h2 class="font-semibold text-lg">Users You Can Follow</h2>
+                                     </div> 
+
+                                     <div class="divide-gray-300 divide-gray-50 divide-opacity-50 divide-y px-4 "> 
+
+                                        <!-- Suggested users list -->
+                                        {% for suggestion in suggestions_username_profile_list %} 
+                                        <div class="flex items-center justify-between py-3"> 
+                                            <div class="flex flex-1 items-center space-x-4">
+
+                                                 <!-- User profile-->
+                                                 <a href="/profile/{{suggestion.user}}"> <img src="{{suggestion.profileimg.url}}" class="bg-gray-200 rounded-full w-10 h-10"> </a>
+
+                                                  <!-- Username and bio -->
+                                                  <div class="flex flex-col"> <span class="block capitalize font-semibold"> {{suggestion.user}} </span> <span class="block capitalize text-sm"> {{suggestion.bio}} </span> 
+                                                </div> 
+                                            </div> 
+
+                                            <!-- Profile link -->
+                                            <a href="/profile/{{suggestion.user}}" class="border border-gray-200 font-semibold px-4 py-1 rounded-full hover:bg-pink-600 hover:text-white hover:border-pink-600 "> 
+                                                View User 
+                                            </a> 
+                                        </div> 
+                                        {% endfor %} 
+                                    </div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                    </div> 
+                </div> 
+
+
+
+    <!-- ======================================= 
+                Scripts Section
+    ================================================== --> 
+
+
+    <!-- =======================================
+     External JavaScript Libraries
+    ======================================= -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/uikit.js' %}"></script> 
+    <script src="{% static 'assets/js/simplebar.js' %}"></script> 
+    <script src="{% static 'assets/js/custom.js' %}"></script> 
+
+     <!-- =======================================
+     Toggle Comments Function
+    ======================================= -->           
+    <script> 
+    /**
+    * toggleComments
+    * Toggles the visibility of the comments container for a specific post.
+    *
+    * @param {HTMLElement} button - The "View Comments" button that was clicked.
+    */
+    function toggleComments(button) { 
+        // Find the parent post container
+        const post = button.closest('.bg-white'); 
+
+        // Find the comments container inside this post
+        const comments = post.querySelector('.comments-container');
+
+        // Toggle the 'hidden' class to show/hide comments
+        comments.classList.toggle('hidden'); } 
+    </script> 
+
+    <!-- =======================================
+     Toggle Comment Menu Function
+    ======================================= -->
+    <script> 
+    /**
+    * toggleMenu
+    * Toggles the visibility of the settings menu for a comment (edit/delete options).
+    *
+    * @param {string} commentId - The ID of the comment.
+    */    
+    function toggleMenu(commentId) {
+        // Get the menu element by its ID
+        const menu = document.getElementById("menu-" + commentId);
+
+         // Toggle display property
+        if (menu.style.display === "none" || menu.style.display === "") {
+             menu.style.display = "block"; }
+        else {
+             menu.style.display = "none";
+             } } 
+    </script>
+
+    <!-- =======================================
+     File Upload Validation
+    ======================================= -->
+    <script> 
+    /**
+    * Validates the file input for upload posts.
+    * Checks file type and size.
+    */
+    const fileInput = document.getElementById('fileInput'); // File input element
+    const fileError = document.getElementById('fileError'); // Element to display error messages
+
+    fileInput.addEventListener('change', function() {
+        const file = fileInput.files[0]; // Get the selected file
+        if (!file) return; // Exit if no file selected
+
+        const maxSize = 20 * 1024 * 1024; // Maximum file size 20MB
+        const allowedTypes = [
+            'image/jpeg',
+            'image/png',
+            'image/jpg',
+            'video/mp4',
+            'video/mov',
+        ]; 
+
+        // Clear previous error message
+        fileError.textContent = ""; 
+
+        // Check file size
+        if (file.size > maxSize) {
+            fileError.textContent = "File is too large! Maxmium size to 20MB."; 
+            this.value = "";  // Reset file input
+            return; } 
+
+        // Check file type
+        if(!allowedTypes.includes(file.type)) {
+            fileError.textContent = "Invalid file type! Only .jpg. .png. .jpeg, .mp4 and .mov files are allowed"; 
+            this.value = "";  // Reset file input
+            return;
+        } 
+
+        // If valid
+        fileError.textContent = "File is valid"; 
+        fileError.style.color = "green"; }) 
+    </script>
+
+    <!-- =======================================
+     Download Post with AJAX
+    ======================================= -->
+    <script>
+    /**
+    * Attaches click event to download buttons for posts.
+    * Prevents page reload and updates download count dynamically.
+    */
+    document.querySelectorAll('.download-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent normal page reload
+
+            const postId = this.dataset.postId; // Get post ID from data attribute
+            const url = this.href; // URL to download post
+
+            // Send AJAX request to server
+            fetch(url)
+            .then(response => {
+                if (response.ok) {
+                    // Increment the downloads counter in the page
+                    const counter = document.getElementById(`downloads-${postId}`);
+                    let current = parseInt(counter.textContent);
+                    counter.textContent = current + 1;
+
+                    // Trigger the actual download
+                    response.blob().then(blob => {
+                        const downloadUrl = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = downloadUrl;
+                        a.download = ""; // Browser will use server filename
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    });
+            } else {
+                alert("Download failed!");
+            }
+        })
+        .catch(err => console.error(err)); // Log errors
+    });
+});
+</script>
+
+    <!-- =======================================
+     Ionicons Library
+    ======================================= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
+
+    </body> 
+</html>

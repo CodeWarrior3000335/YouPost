@@ -1,0 +1,198 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<!-- Character encoding (ensures proper display of text) -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<!-- Responsive design for mobile and different screen sizes -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- SEO description (currently empty, should be filled for better search ranking) -->
+    <meta name="description" content="" />
+
+	<!-- SEO keywords (currently empty, optional for search engines) -->
+    <meta name="keywords" content="" />
+
+	<!-- Dynamic page title showing the user's profile -->
+	<title>Profile - {{user_profile.user.username}}</title>
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+
+</head>
+<body>
+
+<!-- Main theme layout wrapper -->
+<div class="theme-layout">
+	
+	</div>
+	
+	<!-- ========================
+     Profile Header Section
+	========================= -->
+	<section>
+			<div class="feature-photo">
+				<!-- Cover photo / banner -->
+				<figure><img src="{% static 'images/resources/timeline-1.jpg' %}" alt=""></figure>
+
+				<!-- Follow form -->
+				<form action="/follow" method="POST">
+					{% csrf_token %}
+
+
+					<div class="add-btn">
+						<!-- Home link -->
+						<span style="color: white; font-size: 27px; margin-right: 520px;"><b><u><a href="/">Home</a></u></b>
+						</span>
+
+					<!-- Display number of posts dynamically -->
+					{% if user_post_length == 0 %}
+					<span style="color: white; font-size: 27px;"><b>No Post</b></span>
+					{% elif user_post_length == 1 %}
+					<span style="color: white; font-size: 27px;"><b>{{user_post_length}} Post</b></span>
+					{% else %}
+					<span style="color: white; font-size: 27px;"><b>{{user_post_length}} Posts</b></span>
+					{% endif %}
+
+					<!-- Display followers dynamically -->
+					{% if user_followers == 0 or user_followers == 1 %}
+					<span style="color: white; font-size: 27px;"><b>{{user_followers}} follower</b></span>
+					{% else %}
+					<span style="color: white; font-size: 27px;"><b>{{user_followers}} followers</b></span>
+					{% endif %}
+
+					 <!-- Display following dynamically -->
+					<span style="color: white; font-size: 27px;"><b>{{user_following}} following</b></span>
+
+					<!-- Hidden fields for follow form -->
+					<input type="hidden" value="{{user.username}}" name="follower" />
+					<input type="hidden" value="{{user_object.username}}" name="user" />
+					
+					<!-- If the logged-in user is visting their own profile, display their settings for them -->
+					{% if user_object.username == user.username %}
+					<a href="/settings" data-ripple="">Account Settings</a>
+
+					<!-- If not, display 'Follow' or 'Unfollow' button -->
+					{% else %}
+					<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">{{button_text}}</button></a>
+					{% endif %}
+
+					</div>
+				</form>
+
+				<!-- Profile avatar and info -->
+				<div class="container-fluid">
+					<div class="row merged">
+						<!-- Avatar column -->
+						<div class="col-lg-2 col-sm-3">
+							<div class="user-avatar">
+								<figure>
+									<img src="{{user_profile.profileimg.url}}" style="height: 250px; width: 100%;" alt="">
+									
+								</figure>
+							</div>
+						</div>
+
+						<!-- Timeline info column -->
+						<div class="col-lg-10 col-sm-9">
+							<div class="timeline-info">
+								<ul>
+									<li class="admin-name">
+									  <!-- Display username -->
+									  <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 27px;"><b>@{{user_profile.user.username}}</b></h5>
+									 
+									</li>
+									
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</section>
+		<!-- End Profile Header -->
+
+
+		<!-- ========================
+				Bio Section
+		========================= -->
+		<section>
+			<div class="bio">
+					{{user_profile.bio}} <!-- Display user's bio -->
+			</div>
+		</section>
+		
+
+	<!-- ========================
+     		Posts Section
+	========================= -->
+	<section>
+		<div class="gap gray-bg">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="row" id="page-contents">
+							<div class="col-lg-3">
+								<aside class="sidebar static">	
+
+								</aside>
+							</div>
+							
+
+							<!-- Center column for posts -->
+							<div class="col-lg-6">
+								<div class="central-meta">
+									<ul class="photos">	
+										<!-- Displays all existing posts of the profile user -->					
+										{% for post in user_posts %}
+										<li>
+
+											<!-- Displays image posts -->
+											{% if post.is_image %}
+											<a class="strip" href="{{post.file.url}}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+												<img src="{{post.file.url}}" style="height: 250px; width: 300px;" alt=""></a>
+
+											<!-- Displays video posts -->
+											{% elif post.is_video %}
+											<a class="strip" href="{{post.file.url}}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
+												<video src="{{post.file.url}}" style="height: 250px; width: 300px;" controls></video></a>
+
+											{% endif %}
+										</li>
+
+										{% endfor %}
+
+									</ul>
+									
+								</div>
+							</div>
+							<div class="col-lg-3">
+								<aside class="sidebar static">
+									
+								</aside>
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>	
+	</section>
+	<!-- End Posts Section -->
+	
+	<!-- ========================
+     JavaScript Includes
+	========================= -->
+	<script data-cfasync="false" src="{% static '../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="{% static 'js/main.min.js' %}"></script>
+	<script src="{% static 'js/script.js' %}"></script>
+
+</body>	
+
+
+</html>

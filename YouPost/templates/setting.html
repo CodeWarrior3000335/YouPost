@@ -1,0 +1,122 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design for mobile and different screen sizes -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon (browser tab icon) -->
+    <link href="{% static 'assets/images/favicon.png' %}" rel="icon" type="image/png">
+
+    <!-- Page title -->
+    <title>Settings</title>
+
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}"> <!-- Icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}"> <!-- UI Kit framework -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}"> <!-- Main site styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}"> <!-- Tailwind CSS utilities -->
+
+</head>
+
+<body>
+
+    <!-- ========================
+        Main Container
+    ========================= -->
+    <div class="container m-auto"> 
+
+            <!-- Page header / breadcrumb -->
+            <h1 class="text-2xl leading-none text-gray-900 tracking-tight mt-3">
+                <a href="/">Home</a> / Account Setting for <b>{{user.username}}</b> 
+            </h1>
+                
+            <br>
+            <hr>
+
+            <!-- Grid layout: sidebar (general info) + main settings form -->
+            <div class="grid lg:grid-cols-3 mt-12 gap-8">
+
+                <!-- Sidebar / General Info -->
+                <div>
+                    <h3 class="text-xl mb-2"> General</h3>
+                    <p></p>
+                </div>
+
+                <!-- Main settings form -->
+                <div class="bg-white rounded-md lg:shadow-lg shadow col-span-2">
+                        
+                    <!-- Form for updating user profile -->
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                       <!-- Grid layout inside form -->
+                       <div class="grid grid-cols-2 gap-3 lg:p-6 p-4">
+                           
+                            <!-- Profile Image Upload -->
+                            <div class="col-span-2">
+                                <label for=""> Profile Image</label>                               
+                                <!-- Display current profile image -->
+                                <img width="100" height="100" src="{{user_profile.profileimg.url}}" />
+                                <!-- File input to change image -->
+                                <input type="file" name="image" value="" class="shadow-none bg-gray-100">
+                            </div>
+
+                            <!-- Bio textarea -->
+                            <div class="col-span-2">
+                                <label for="about">Bio</label>  
+                                <textarea id="about" name="bio" rows="3"  class="shadow-none bg-gray-100">{{user_profile.bio}}</textarea>
+                            </div> 
+
+                            <!-- Location input -->
+                            <div class="col-span-2">
+                                <label for=""> Location</label>
+                                <input type="text" name="location" value="{{user_profile.location}}" class="shadow-none bg-gray-100">
+                            </div>
+                            
+                       </div> 
+    
+                       <!-- Form action buttons -->
+                       <div class="bg-gray-10 p-6 pt-0 flex justify-end space-x-3">
+                            <!-- Cancel button -->
+                           <button class="p-2 px-4 rounded bg-gray-50 text-red-500">
+                               <a href="/">Cancel</a>
+                            </button>
+                            <!-- Save / Submit button -->
+                           <button type="submit" class="button bg-blue-700"> Save </button>
+                       </div>
+                    </form>
+    
+                    </div> <!-- End Main Form -->
+                </div> <!-- End Grid -->
+
+                <br>
+            </div> <!-- End Container -->
+
+            </div>
+            
+        </div>
+
+    </div>
+
+
+    
+
+    <!-- ========================
+        JavaScript Includes
+    ========================= -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script> <!-- Tooltip library -->
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script> <!-- jQuery library -->
+    <script src="{% static 'assets/js/uikit.js' %}"></script> <!-- UI Kit scripts -->
+    <script src="{% static 'assets/js/simplebar.js' %}"></script> <!-- Custom scrollbars -->
+    <script src="{% static 'assets/js/custom.js' %}"></script> <!-- Site-specific scripts -->
+
+
+    <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script> <!-- Ionicons -->
+</body>
+
+</html>

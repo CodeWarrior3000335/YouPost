@@ -1,0 +1,456 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+
+    <!-- Character encoding -->
+    <meta charset="UTF-8">
+
+    <!-- Responsive design for mobile and different screen sizes -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon (browser tab icon) -->
+    <link href="favicon.png" rel="icon" type="image/png">
+
+    <!-- Page title -->
+    <title>Search</title>
+
+
+    <!-- CSS stylesheets -->
+    <link rel="stylesheet" href="{% static 'assets/css/icons.css' %}"> <!-- Icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/css/uikit.css' %}"> <!-- UIkit framework -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}"> <!-- Main styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/tailwind.css' %}"> <!-- Tailwind utilities -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- Font Awesome icons -->
+</head>
+
+<body>
+
+        <!-- ========================
+            Search Form & Header
+        ========================= -->
+        <form action="search" method="POST">
+            {% csrf_token %}
+
+            <header style="margin-top: -23px;">
+                <div class="header_inner">
+
+                    <!-- Left side: Logo and Search input -->
+                    <div class="left-side">
+                        <!-- Logo (hidden on small screens) -->
+                        <div id="logo" class=" uk-hidden@s">
+                            <a href="/">
+                                
+                            </a>
+                        </div>
+
+                        <!-- Search input -->
+                        <input type="text" name="username" placeholder="Search for username..">&nbsp; &nbsp;
+                        <button type="submit"><i class="fa fa-search fa-1x"></i></button>
+                            
+                    </div>
+
+                    <!-- Right side: User info, New Post button, profile dropdown -->
+                    <div class="right-side lg:pr-4">
+
+                        <!-- Welcome user -->
+                        <a href="#" class="">
+                            Welcome <b name="" class="">{{user.username}}&nbsp; &nbsp; &nbsp;</b>
+                        </a>
+
+                         <!-- New Post Button -->
+                        <a href="#"
+                            class="bg-pink-500 flex font-bold hidden hover:bg-pink-600 hover:text-white inline-block items-center lg:block max-h-10 mr-4 px-4 py-2 rounded shado text-white">
+                            <ion-icon name="add-circle" class="-mb-1
+                             mr-1 opacity-90 text-xl uilus-circle"></ion-icon> New Post
+                        </a>
+
+                        <!-- Upload dropdown (Images / Videos) -->
+                        <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small" class="header_dropdown">
+    
+                            <!-- Upload dropdown title -->
+                            <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
+                                <h4>Upload Images or Videos</h4>
+                            </div>
+    
+                            <!-- Upload content container -->
+                            <div class="flex justify-center flex-center text-center">
+    
+                                <!-- UPLOAD SECTION -->
+                                <div class="flex flex-col choose-upload text-center">         
+
+                                    <!-- Drag-and-drop upload area -->
+                                    <div class="bg-gray-100 border-2 border-dashed flex flex-col h-24 items-center justify-center relative w-full rounded-lg  ">
+
+                                         <!-- Upload icon -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-12">
+                                            <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
+                                            <path d="M9 13h2v5a1 1 0 11-2 0v-5z" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Upload instruction text -->
+                                    <p class="my-3 leading-6"> Upload file
+                                    </p>
+
+                                    <!-- Custom file upload button -->
+                                    <div uk-form-custom>
+                                        <input type="file">
+                                        <a href="#" class="button soft-warning small"> Choose file</a>
+                                    </div>
+    
+                                    <a href="#" class="uk-text-muted mt-3 uk-link"
+                                        uk-toggle="target: .choose-upload ;  animation: uk-animation-slide-right-small, uk-animation-slide-left-medium; queued: true">
+                                        <!--Or Import Video--> </a>
+                                </div>
+    
+                                
+    
+                            </div>
+
+                             <!-- File size notice -->
+                            <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm">
+                                Your File size Must be Maxmium 20MB
+                            </div>
+                        </div>
+
+                        
+                        <!-- ======================================
+                                MESSAGE DROPDOWN
+                        ====================================== -->
+                        <div uk-drop="mode: click;offset: 4" class="header_dropdown">
+
+                            <!-- Messages title -->
+                            <h4
+                                class="-mt-5 -mx-5 bg-gradient-to-t from-gray-100 to-gray-50 border-b font-bold px-6 py-3">
+                                Messages 
+                            </h4>
+
+                            <!-- Scrollable message list -->
+                            <ul class="dropdown_scrollbar" data-simplebar>
+                                <li>
+                                    <a href="#">
+                                        <div class="drop_avatar"> <img src="{% static 'assets/images/avatars/avatar-1.jpg' %}" alt="">
+                                        </div>
+                                        <div class="drop_content">
+                                            <strong> Taiye </strong> <time> 6:43 PM</time>
+                                            <p> hi tomi </p>
+                                        </div>
+                                    </a>
+                                </li>
+                                
+
+
+                            </ul>
+
+                            <!-- Link to view all messages -->
+                            <a href="#" class="see-all">See all</a>
+
+
+                        </div>
+
+                    
+                        <!-- ======================================
+                                USER PROFILE IMAGE
+                        ====================================== -->
+                        <a href="#">
+                            <img src="{{ user_profile.profileimg.url }}" class="header-avatar" alt="">
+                        </a>
+
+                        <!-- PROFILE DROPDOWN MENU -->
+                        <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
+
+                            <ul>
+
+                                <!-- Account settings page -->
+                                <li>
+                                    <a href="/settings"> Account setting </a> 
+                                </li>
+                                
+                                <!-- Logout -->
+                                <li>
+                                    <a href="/logout"> Log Out</a>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+            </form>
+
+
+            <!-- ======================================================
+                    SEARCH RESULTS SECTION
+                    Displays profiles matching the search query
+            ====================================================== -->
+
+            
+            <div style="margin-left: 250px; margin-right: 250px;">
+                
+                <!-- ======================================
+                        CUSTOM SEARCH RESULT STYLES
+                ====================================== -->
+                <style>
+
+                /* Add space above the page and set a light grey background for the whole page */
+                body{margin-top:20px;
+                background-color: #eee;
+                }
+
+                /* Style links inside the search category list */
+                .search-result-categories>li>a {
+
+                    /* Light grey text color */
+                    color: #b6b6b6;
+
+                    /* Slightly lighter font weight (normal) */
+                    font-weight: 400
+                }
+
+
+                /* Change appearance when the user hovers over a category link */
+                .search-result-categories>li>a:hover {
+
+                    /* Slightly darker background on hover */
+                    background-color: #ddd;
+
+                    /* Darker text color for readability */
+                    color: #555
+                }
+
+                /* Add spacing between a glyphicon icon and the text */
+                .search-result-categories>li>a>.glyphicon {
+
+                    /* Creates 5px space to the right of the icon */
+                    margin-right: 5px
+                }
+
+                /* Style badge elements inside category links */
+                .search-result-categories>li>a>.badge {
+
+                    /* Moves the badge (usually a number) to the far right */
+                    float: right
+                }
+
+                /* Space above the "results count" text (e.g. "About 100 results") */
+                .search-results-count {
+                    margin-top: 10px
+                }
+
+                /* Main container for each search result item */
+                .search-result-item {
+
+                     /* Adds spacing inside the result card */
+                    padding: 20px;
+
+                    /* White background to separate it from the page */
+                    background-color: #fff;
+
+                    /* Rounded corners */
+                    border-radius: 4px
+                }
+
+                /* Creates a clearfix technique to handle floating elements */
+                .search-result-item:after,
+                .search-result-item:before {
+
+                    /* Inserts invisible content */
+                    content: " ";
+
+                    /* Makes it behave like a table layout element */
+                    display: table
+                }
+
+                /* Clears floating elements inside the result card */
+                .search-result-item:after {
+                    clear: both
+                }
+
+                /* Styles the clickable image container */
+                .search-result-item .image-link {
+
+                    /* Makes it behave like a block element */
+                    display: block;
+
+                    /* Prevents image overflow */
+                    overflow: hidden;
+
+                    /* Rounded corners on the top-left */
+                    border-top-left-radius: 4px;
+
+                    /* Rounded corners on the bottom-left */
+                    border-bottom-left-radius: 4px
+                }
+
+                /* Applies only when screen width is 768px or larger (desktop/tablet) */
+                @media (min-width:768px) {
+
+                    .search-result-item .image-link {
+
+                        /* Allows text to sit beside the image */
+                        display: inline-block;
+
+                        /* Adjusts spacing around the image */
+                        margin: -20px 0 -20px -20px;
+
+                        /* Floats the image to the left side */
+                        float: left;
+
+                        /* Fixes image container width */
+                        width: 200px
+                    }
+                }
+
+                /* Applies only when screen width is smaller than 768px (mobile) */
+                @media (max-width:767px) {
+                    .search-result-item .image-link {
+
+                        /* Limits image height on small screens */
+                        max-height: 200px
+                    }
+                }
+
+                /* Ensures images never overflow their container */
+                .search-result-item .image {
+
+                    /* Image width cannot exceed container width */
+                    max-width: 100%
+                }
+
+
+                /* Style for small information text (e.g. location) */
+                .search-result-item .info {
+
+                    /* Small space above the text */
+                    margin-top: 2px;
+
+                    /* Small font size */
+                    font-size: 12px;
+
+                    /* Grey text color */
+                    color: #999
+                }
+
+                /* Style for user bio or description text */
+                .search-result-item .description {
+
+                    /* Slightly larger text than info text */
+                    font-size: 13px
+                }
+
+                /* Adds space between consecutive search result cards */
+                .search-result-item+.search-result-item {
+
+                    /* Adds vertical spacing between items */
+                    margin-top: 20px
+                }
+
+                /* Applies only on larger screens */
+                @media (min-width:768px) {
+                    .search-result-item-body {
+
+                        /* Leaves space for the image on the left */
+                        margin-left: 200px
+                    }
+                }
+
+                /* Style for the search result title (usually username) */
+                .search-result-item-heading {
+
+                    /* Regular font weight */
+                    font-weight: 400
+                }
+
+                /* Style for links inside the result heading */
+                .search-result-item-heading>a {
+
+                    /* Dark grey color */
+                    color: #555
+                }
+
+                /* Adjust heading margin on larger screens */
+                @media (min-width:768px) {
+
+                    .search-result-item-heading {
+
+                        /* Removes default margin */
+                        margin: 0
+                    }
+                }
+                </style>
+
+                <div class="container">
+                <div class="row ng-scope">
+
+                    <!-- Sidebar showing the searched username -->
+                    <div class="col-md-3 col-md-push-9">
+                        <h4>Results For <span class="fw-semi-bold"><b>{{username}}</b></span></h4>
+                        <br>
+                        
+                    </div>
+
+                    <!-- MAIN SEARCH RESULTS -->
+                    <div class="col-md-9 col-md-pull-3">
+                        
+                        <!-- Loops through matching user profiles -->
+                        {% for users in username_profile_list %}
+
+                        <section class="search-result-item">
+
+                            <!-- Profile image -->
+                            <a class="image-link" href="/profile/{{users.user}}"><img class="image" src="{{users.profileimg.url}}">
+                            </a>
+
+
+                            <div class="search-result-item-body">
+                                <div class="row">
+                                    <div class="col-sm-9">
+
+                                       <!-- Username -->
+                                        <h4 class="search-result-item-heading"> 
+                                            
+                                            <a href="/profile/{{users.user}}"><b>@{{users.user}}</b></a>
+                                        
+                                        </h4>
+
+                                        <!-- User location -->
+                                        <p class="info">{{users.location}}</p>
+
+                                        <!-- User bio -->
+                                        <p class="description">{{users.bio}}</p>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </section>
+                        {% endfor %}
+                        
+                        
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+                        JAVASCRIPT FILES
+    ====================================================== -->
+    <script src="{% static 'assets/js/tippy.all.min.js' %}"></script> <!-- Tooltip library -->
+    <script src="{% static 'assets/js/jquery-3.3.1.min.js' %}"></script> <!-- jQuery library -->
+    <script src="{% static 'assets/js/uikit.js' %}"></script> <!-- UIkit JavaScript components -->
+    <script src="{% static 'assets/js/simplebar.js' %}"></script> <!-- Custom scrollbars -->
+    <script src="{% static 'assets/js/custom.js' %}"></script> <!-- Your project's custom JavaScript -->
+    <script src="{% static '../../unpkg.com/ionicons%405.2.3/dist/ionicons.js' %}"></script> <!-- Ionicons icon library -->
+</body>
+
+
+</html>
